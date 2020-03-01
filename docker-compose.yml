@@ -1,0 +1,62 @@
+############
+# - Base - #
+############
+version: "3.4"
+
+############
+# Services #
+############
+services:
+##### Database: Core
+    db:
+        image: mysql:5.7.16
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: messenger
+            MYSQL_USER: messenger
+            MYSQL_PASSWORD: password
+        command:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+        ports:
+            - 3307:3306
+        volumes:
+            - ./volumes/db:/var/lib/mysql
+
+##### Service: Nginx
+    nginx:
+        build:
+            context: ./services
+            dockerfile: nginx.Dockerfile
+            target: nginx-dev
+            args:
+                BUILD_ENV: ${BUILD_ENV:-dev}
+                IMAGE_TAG: 7.2-fpm
+        restart: always
+        volumes:
+            - ./src/core:/app
+        ports:
+            - 8081:80
+        env_file:
+            - ./services/nginx/.env
+
+##### Service: Core (main web service)
+    core:
+        restart: always
+        env_file:
+            - ./services/core/.env
+        build:
+            context: ./services
+            dockerfile: base-php.Dockerfile
+            args:
+                BUILD_ENV: ${BUILD_ENV:-dev}
+                IMAGE_TAG: 7.2-fpm
+                IMAGE_FILES_FOLDER: core
+        depends_on:
+            - nginx
+            - db
+        volumes:
+            - ~/.composer/cache:/root/.composer/cache
+            - ./src/core:/app
+        command: ["php-fpm"]

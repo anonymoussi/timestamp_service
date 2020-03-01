@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+echo "Build environment: $BUILD_ENV"
+if [ $BUILD_ENV = "prod" ]; then
+    echo "Setting folder permissions..."
+    mkdir -p var/sessions/
+    chmod -R 777 var/
+    echo "Installing Composer dependencies..."
+    composer install -o
+else
+    echo "Production build steps skipped."
+fi

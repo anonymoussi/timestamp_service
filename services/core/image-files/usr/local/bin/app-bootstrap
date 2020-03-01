@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+# Runs migrations
+echo "Running migrations..."
+php bin/console doctrine:migration:migrate -n
+
+# Fixes access for PHP FPM user
+echo "Fixing access for PHP FPM user..."
+chown -R www-data:www-data var/
+
+# Starts PHP FPM
+echo "Starting PHP FPM..."
+php-fpm
