@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\ImagePost;
-use App\Message\AddTimestampToImage;
-use App\Message\DeleteTimestampToImage;
+use App\Message\Command\AddTimestampToImage;
+use App\Message\Command\DeleteTimestampToImage;
 use App\Repository\ImagePostRepository;
 use App\Photo\PhotoFileManager;
 use Doctrine\ORM\EntityManagerInterface;

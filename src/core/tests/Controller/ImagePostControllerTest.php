@@ -8,7 +8,7 @@ use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
 class ImagePostControllerTest extends WebTestCase
 {
-    public function testOne()
+    public function testCreateImage()
     {
         $client = static::createClient();
 
@@ -26,9 +26,9 @@ class ImagePostControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        /** @var InMemoryTransport $transposrt*/
-        $transposrt = self::$container->get('messenger.transport.async_priority_high');
+        /** @var InMemoryTransport $transport*/
+        $transport = self::$container->get('messenger.transport.async_priority_high');
 
-        $this->assertCount(1, $transposrt->get());
+        $this->assertCount(1, $transport->get());
     }
 }

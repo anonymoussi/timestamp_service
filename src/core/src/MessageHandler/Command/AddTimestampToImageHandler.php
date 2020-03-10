@@ -1,8 +1,8 @@
 <?php
 
-namespace App\MessegeHandler;
+namespace App\MessageHandler\Command;
 
-use App\Message\AddTimestampToImage;
+use App\Message\Command\AddTimestampToImage;
 use App\Photo\PhotoFileManager;
 use App\Photo\PhotoTimestampficatorManager;
 use App\Repository\ImagePostRepository;

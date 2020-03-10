@@ -1,9 +1,9 @@
 <?php
 
-namespace App\MessegeHandler;
+namespace App\MessageHandler\Command;
 
-use App\Message\DeleteFile;
-use App\Message\DeleteTimestampToImage;
+use App\Message\Command\DeleteTimestampToImage;
+use App\Message\Event\ImagePostDeletedEvent;
 use App\Repository\ImagePostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -14,7 +14,7 @@ class DeleteTimestampToImageHandler implements MessageHandlerInterface
     /**
      * @var MessageBusInterface
      */
-    private $messageBus;
+    private $eventBus;
 
     /**
      * @var EntityManagerInterface
@@ -27,11 +27,11 @@ class DeleteTimestampToImageHandler implements MessageHandlerInterface
     private $imagePostRepository;
 
     public function __construct(
-        MessageBusInterface $messageBus,
+        MessageBusInterface $eventBus,
         EntityManagerInterface $entityManager,
         ImagePostRepository $imagePostRepository
     ) {
-        $this->messageBus = $messageBus;
+        $this->eventBus = $eventBus;
         $this->entityManager = $entityManager;
         $this->imagePostRepository = $imagePostRepository;
     }
@@ -41,12 +41,9 @@ class DeleteTimestampToImageHandler implements MessageHandlerInterface
         $imagePost = $this->imagePostRepository->find($imagePost->getImagePostId());
         $fileName = $imagePost->getFilename();
 
-        /**
-         * @todo Add transaction
-         */
         $this->entityManager->remove($imagePost);
         $this->entityManager->flush();
 
-        $this->messageBus->dispatch(new DeleteFile($fileName));
+        $this->eventBus->dispatch(new ImagePostDeletedEvent($fileName));
     }
 }

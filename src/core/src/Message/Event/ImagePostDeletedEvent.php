@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Event;
 
-class DeleteFile implements AsyncMessages
+class ImagePostDeletedEvent implements EventMessages
 {
     /**
      * @var string

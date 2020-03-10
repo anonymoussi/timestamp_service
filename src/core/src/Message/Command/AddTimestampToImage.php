@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Command;
 
-class DeleteTimestampToImage
+class AddTimestampToImage implements CommandMessages
 {
     /**
      * @var int
