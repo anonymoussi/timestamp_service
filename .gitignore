@@ -1,3 +1,4 @@
 .git
 .idea/
 volumes/
+src/core/public/uploads/*

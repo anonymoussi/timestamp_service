@@ -31,10 +31,7 @@ class PhotoFileManager
         $stream = fopen($file->getPathname(), 'r');
         $result = $this->filesystem->writeStream(
             $newFilename,
-            $stream,
-            [
-                'visibility' => AdapterInterface::VISIBILITY_PUBLIC
-            ]
+            $stream
         );
 
         if ($result === false) {

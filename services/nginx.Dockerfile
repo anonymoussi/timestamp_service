@@ -1,9 +1,8 @@
 ##################
 ### Nginx images for development and production
 ##################
-
 # Build argument: Image tag
-ARG IMAGE_TAG=7.2-fpm
+ARG IMAGE_TAG
 
 ### Stage 1: Development image
 

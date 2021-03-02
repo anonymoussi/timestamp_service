@@ -1,7 +1,7 @@
 ############
 # - Base - #
 ############
-version: "3.4"
+version: "3.7"
 
 ############
 # Services #
@@ -32,7 +32,7 @@ services:
             target: nginx-dev
             args:
                 BUILD_ENV: ${BUILD_ENV:-dev}
-                IMAGE_TAG: 7.2-fpm
+                IMAGE_TAG: 7.4-fpm
         restart: always
         volumes:
             - ./src/core:/app
@@ -42,7 +42,7 @@ services:
             - ./services/nginx/.env
 
 ##### Service: Core (main web service)
-    core:
+    core:  &base-core-service
         restart: always
         env_file:
             - ./services/core/.env
@@ -51,7 +51,7 @@ services:
             dockerfile: base-php.Dockerfile
             args:
                 BUILD_ENV: ${BUILD_ENV:-dev}
-                IMAGE_TAG: 7.2-fpm
+                IMAGE_TAG: 7.4-fpm
                 IMAGE_FILES_FOLDER: core
         depends_on:
             - nginx
@@ -60,3 +60,11 @@ services:
             - ~/.composer/cache:/root/.composer/cache
             - ./src/core:/app
         command: ["php-fpm"]
+
+    messenger-consume-async-priority-high:
+        <<: *base-core-service
+        command: [ "php", "bin/console", "messenger:consume", "async_priority_high", "-vvv" ]
+
+    messenger-consume-async:
+        <<: *base-core-service
+        command: [ "php", "bin/console", "messenger:consume", "async", "-vvv" ]

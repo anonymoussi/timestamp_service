@@ -20,7 +20,6 @@ class MainController extends AbstractController
         /** @var HandledStamp $totalImageCount*/
         $totalImageCount = $envelope->last(HandledStamp::class);
 
-        dump($totalImageCount->getResult());
         return $this->render('main/homepage.html.twig');
     }
 }
